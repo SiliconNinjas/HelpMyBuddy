@@ -27,7 +27,7 @@ const CreateScreen = () => {
           within the mentioned time.
         </Text>
       </View>
-      <ConfirmHelpBtn />
+      <ConfirmHelpBtn BtnText={"Get Help"} />
     </SafeAreaView>
   );
 };

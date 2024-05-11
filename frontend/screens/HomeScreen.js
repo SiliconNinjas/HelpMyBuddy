@@ -2,6 +2,7 @@ import { SafeAreaView, Text, View, ScrollView } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import TopBar from "../components/TopBar";
 import { themeColors } from "../themes";
+import TaskComponent from "../components/TaskComponent";
 
 const HomeScreen = () => {
   return (
@@ -13,9 +14,9 @@ const HomeScreen = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 100 }}
       >
-        <View className="flex-row items-center space-x-2 px-4 pb-2">
-          <Text className="text-2xl font-bold text-white">Home</Text>
-        </View>
+        <TaskComponent />
+        <TaskComponent />
+        <TaskComponent />
       </ScrollView>
     </View>
   );
