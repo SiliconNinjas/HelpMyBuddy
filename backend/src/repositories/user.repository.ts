@@ -124,4 +124,23 @@ export class UserRepository extends Repository<UserEntity> {
       return sendErrorResponse(res, "Internal server error", 500);
     }
   }
+
+  async getUserInfo(req: Request, res: Response) {
+    try {
+      const { userId } = req.params;
+
+      // Find the user by userId
+      const user = await this.findOne(userId);
+
+      if (!user) {
+        return sendErrorResponse(res, "User not found", 404);
+      }
+
+      // Return user information
+      return sendSuccessResponse(res, user);
+    } catch (error) {
+      console.error(error);
+      return sendErrorResponse(res, "Internal server error", 500);
+    }
+  }
 }

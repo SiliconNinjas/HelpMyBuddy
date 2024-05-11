@@ -5,6 +5,8 @@ import { CustomRequest } from "../express.types";
 
 const router = express.Router();
 
+router.get("/getUserInfo", authMiddleware, UserController.getUserInfo);
+
 router.post("/loginOrSignup", UserController.loginOrSignup);
 
 router.put("/updateUserInfo", authMiddleware, UserController.updateUserInfo);
