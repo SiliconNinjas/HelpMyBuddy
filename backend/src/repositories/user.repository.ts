@@ -1,8 +1,13 @@
+// user.repository.ts
 import { Request, Response } from "express";
 import { EntityRepository, Repository } from "typeorm";
-import bcrypt from "bcrypt";
 import { UserEntity } from "../entities/user.entity";
-import { sendErrorResponse, sendSuccessResponse } from "../utils/ customError";
+import { sendErrorResponse, sendSuccessResponse } from "../utils/customError";
+import {
+  comparePassword,
+  generateToken,
+  hashPassword,
+} from "../utils/services/auth.service";
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
@@ -16,23 +21,13 @@ export class UserRepository extends Repository<UserEntity> {
         return sendErrorResponse(res, "Invalid email address", 400);
       }
 
-      // Password validation
-      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-      if (!passwordRegex.test(password)) {
-        return sendErrorResponse(
-          res,
-          "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit",
-          400
-        );
-      }
-
       // Check if user with this email already exists
       const existingUser = await this.findOne({ where: { email } });
 
       // If user doesn't exist, create a new user
       if (!existingUser) {
         // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await hashPassword(password);
 
         // Create new user
         const newUser = this.create({
@@ -43,10 +38,13 @@ export class UserRepository extends Repository<UserEntity> {
         // Save the new user
         await this.save(newUser);
 
-        return sendSuccessResponse(res, newUser);
+        // Generate JWT token
+        const token = generateToken({ userId: newUser.userId });
+
+        return sendSuccessResponse(res, { user: newUser, token });
       } else {
         // If user exists, validate the password
-        const isMatched = await bcrypt.compare(
+        const isMatched = await comparePassword(
           password,
           existingUser.password!
         );
@@ -55,7 +53,10 @@ export class UserRepository extends Repository<UserEntity> {
           return sendErrorResponse(res, "Wrong credentials", 401);
         }
 
-        return sendSuccessResponse(res, existingUser);
+        // Generate JWT token
+        const token = generateToken({ userId: existingUser.userId });
+
+        return sendSuccessResponse(res, { user: existingUser, token });
       }
     } catch (error) {
       console.error(error);
