@@ -5,10 +5,8 @@ import { CustomRequest } from "../express.types";
 
 const router = express.Router();
 
-router.post("/login", UserController.createNewAccountUsingPhone);
-router.post("/test", authMiddleware, (req: CustomRequest, res: Response) => {
-  // Get tasks logic
-  res.send(req.user); // You can access the `user` property now
-});
+router.post("/loginOrSignup", UserController.loginOrSignup);
+
+router.put("/updateUserInfo", authMiddleware, UserController.updateUserInfo);
 
 export default router;

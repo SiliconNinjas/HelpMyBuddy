@@ -2,7 +2,7 @@ import express from "express";
 import http from "http";
 import { PORT } from "./config /config.keys";
 import { connectionOptions } from "./config /ormconfig";
-import authRoutes from "./routes/user.route";
+import userRoutes from "./routes/user.route";
 import { createConnection } from "typeorm";
 
 const app = express();
@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
 });
 
 //! USER
-app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 
 // Database connection
 const connect = async () => {
