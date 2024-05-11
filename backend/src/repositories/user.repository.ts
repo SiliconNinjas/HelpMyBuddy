@@ -1,4 +1,3 @@
-// user.repository.ts
 import { Request, Response } from "express";
 import { EntityRepository, Repository } from "typeorm";
 import { UserEntity } from "../entities/user.entity";
@@ -96,6 +95,25 @@ export class UserRepository extends Repository<UserEntity> {
 
       // Update user information
       await this.update({ userId }, fieldToUpdate);
+
+      // Fetch user data before updating isEligible
+      const user = await this.findOne({ userId });
+
+      // Check if user is not undefined
+      if (!user) {
+        return sendErrorResponse(res, "User not found", 404);
+      }
+
+      // Check if all user information fields are not null or not empty
+      const allFieldsFilled = validFields.every((field) => {
+        return (
+          user[field as keyof UserEntity] !== null &&
+          user[field as keyof UserEntity] !== ""
+        );
+      });
+
+      // Update isEligible based on allFieldsFilled
+      await this.update({ userId }, { isEligible: allFieldsFilled });
 
       // Fetch updated user data
       const updatedUser = await this.findOne({ userId });

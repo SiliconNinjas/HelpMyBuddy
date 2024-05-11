@@ -3,13 +3,12 @@ import http from "http";
 import { PORT } from "./config /config.keys";
 import { connectionOptions } from "./config /ormconfig";
 import userRoutes from "./routes/user.route";
+import taskRoutes from "./routes/task.route";
 import { createConnection } from "typeorm";
 
 const app = express();
 
 const server = http.createServer(app);
-
-const router = express.Router();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -20,6 +19,9 @@ app.get("/", (req, res) => {
 
 //! USER
 app.use("/api/user", userRoutes);
+
+//! TASK
+app.use("/api/task", taskRoutes);
 
 // Database connection
 const connect = async () => {

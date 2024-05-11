@@ -69,6 +69,9 @@ export class UserEntity extends BaseEntity {
   @Column({ type: "numeric", default: 0 })
   totalEarnings!: number;
 
-  @OneToMany(() => TaskEntity, (task) => task.taskOwner)
+  @OneToMany(() => TaskEntity, (task) => task.taskOwner, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+  })
   tasks!: TaskEntity[];
 }
