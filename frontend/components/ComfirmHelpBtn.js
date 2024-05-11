@@ -1,9 +1,15 @@
-import { SafeAreaView, Text, TextInput, View } from "react-native";
+import {
+  SafeAreaView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { themeColors } from "../themes";
 
-const ConfirmHelpBtn = ({ BtnText }) => {
+const ConfirmHelpBtn = ({ BtnText, onPress }) => {
   return (
-    <View>
+    <TouchableOpacity onPress={onPress}>
       <View className="flex flex-row justify-center mt-5 px-4">
         <View
           className="w-full h-14 rounded-xl flex items-center justify-center"
@@ -12,7 +18,7 @@ const ConfirmHelpBtn = ({ BtnText }) => {
           <Text className="text-lg text-white">{BtnText}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

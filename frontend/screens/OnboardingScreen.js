@@ -25,7 +25,7 @@ const OnboardingScreen = () => {
             ).uri,
           },
           {
-            title: "Book a task and get help today",
+            title: "Book a task and get help",
             subtitle:
               "After finding a helper, you can quickly book a task and receive confirmation. Your helper will then contact you to arrange a meeting time.",
             imageUri: Image.resolveAssetSource(
@@ -35,6 +35,7 @@ const OnboardingScreen = () => {
         ]}
         primaryButtonStyle={{ backgroundColor: "#FE914C" }}
         type={"fullscreen"}
+        onDone={() => navigation.navigate("Auth")}
       />
     </View>
   );

@@ -1,7 +1,7 @@
 import { SafeAreaView, Text, TextInput, View } from "react-native";
 import { themeColors } from "../themes";
 
-const TextInputComponent = ({ title, onChange }) => {
+const TextInputComponent = ({ title, onChange, secureEntryText, value }) => {
   return (
     <View className="px-6 mt-5">
       <View
@@ -13,6 +13,8 @@ const TextInputComponent = ({ title, onChange }) => {
           placeholder={title}
           placeholderTextColor="gray"
           onChangeText={onChange}
+          secureTextEntry={secureEntryText}
+          value={value}
         ></TextInput>
       </View>
     </View>

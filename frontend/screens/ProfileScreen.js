@@ -2,8 +2,27 @@ import { SafeAreaView, Text, View, ScrollView } from "react-native";
 import { themeColors } from "../themes";
 import ProfileComponent from "../components/ProfileComponent";
 import TopBar from "../components/TopBar";
+import Dialog from "react-native-dialog";
+import { useState } from "react";
 
 const ProfileScreen = () => {
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [inputText, setInputText] = useState("");
+  const [editingTitle, setEditingTitle] = useState("");
+
+  const showDialog = () => {
+    setDialogVisible(true);
+  };
+
+  const handleCancel = () => {
+    setDialogVisible(false);
+  };
+
+  const handleSave = () => {
+    // Save the changes here
+    console.log(inputText);
+    setDialogVisible(false);
+  };
   return (
     <View style={{ backgroundColor: themeColors.bgColor }} className="h-full">
       <TopBar pageName="Profile" />
@@ -34,7 +53,14 @@ const ProfileScreen = () => {
             title="Email"
             data="jd@gmail.com"
             buttonName="Edit"
+            onPress={showDialog}
           />
+          <Dialog.Container visible={dialogVisible}>
+            <Dialog.Title>Edit {editingTitle}</Dialog.Title>
+            <Dialog.Input onChangeText={setInputText} />
+            <Dialog.Button label="Cancel" onPress={handleCancel} />
+            <Dialog.Button label="Save" onPress={handleSave} />
+          </Dialog.Container>
           <ProfileComponent title="Gender" data="NA" buttonName="Edit" />
           <ProfileComponent title="Date of Birth" data="NA" buttonName="Edit" />
           <ProfileComponent title="Phone" data="NA" buttonName="Edit" />
