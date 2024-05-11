@@ -4,11 +4,27 @@ import ProfileComponent from "../components/ProfileComponent";
 import TopBar from "../components/TopBar";
 import Dialog from "react-native-dialog";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setName,
+  setEmail,
+  setGender,
+  setDateOfBirth,
+  setPhoneNumber,
+} from "../redux/slice/profileSlice";
 
 const ProfileScreen = () => {
   const [dialogVisible, setDialogVisible] = useState(false);
   const [inputText, setInputText] = useState("");
   const [editingTitle, setEditingTitle] = useState("");
+
+  const dispatch = useDispatch();
+
+  const name = useSelector((state) => state.profile.name);
+  const email = useSelector((state) => state.profile.email);
+  const gender = useSelector((state) => state.profile.gender);
+  const dateofbirth = useSelector((state) => state.profile.dateofbirth);
+  const phoneNumber = useSelector((state) => state.profile.phoneNumber);
 
   const showDialog = () => {
     setDialogVisible(true);
@@ -21,6 +37,9 @@ const ProfileScreen = () => {
   const handleSave = () => {
     // Save the changes here
     console.log(inputText);
+    if (editingTitle === "Email") dispatch(setEmail(inputText));
+    else if (editingTitle === "Name") dispatch(setName(inputText));
+    else if (editingTitle === "Gender") dispatch(setGender(inputText));
     setDialogVisible(false);
   };
   return (
