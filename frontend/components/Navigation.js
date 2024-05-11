@@ -41,9 +41,9 @@ const Navigation = () => {
           //return <FontAwesome name={iconName} size={size} color={color} />;
         },
         tabBarStyle: {
-          paddingBottom: 25,
-          paddingTop: 10,
-          height: 80,
+          paddingBottom: 35,
+          paddingTop: 15,
+          height: 90,
           backgroundColor: "#21262E",
           borderTopWidth: 0.5,
           elevation: 5,

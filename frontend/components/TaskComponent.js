@@ -2,6 +2,7 @@ import { SafeAreaView, Text, TextInput, View, Image } from "react-native";
 import { themeColors } from "../themes";
 import placeHolder from "../assets/placeholderImg.jpeg";
 import EarnBtn from "./EarnBtn";
+import ProfilePhotoComponent from "./ProfilePhotoComponent";
 
 const TaskComponent = () => {
   return (
