@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to HelpMyBuddy");
 });
 
-//! AUTHENTICATION
+//! USER
 app.use("/api/auth", authRoutes);
 
 // Database connection

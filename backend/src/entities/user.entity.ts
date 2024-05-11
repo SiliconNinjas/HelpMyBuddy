@@ -1,6 +1,5 @@
-// src/entities/user.entity.ts
-
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from "typeorm";
+import { TaskEntity } from "./task.entity";
 
 enum Gender {
   MALE = "male",
@@ -57,4 +56,7 @@ export class UserEntity extends BaseEntity {
 
   @Column({ type: "numeric", default: 0 })
   totalEarnings!: number;
+
+  @OneToMany(() => TaskEntity, task => task.taskOwner)
+  tasks!: TaskEntity[];
 }
