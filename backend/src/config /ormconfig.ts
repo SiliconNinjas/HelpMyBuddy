@@ -9,7 +9,7 @@ import {
 import { ConnectionOptions } from "typeorm";
 
 const connectionOptions: ConnectionOptions = {
-  ssl: false,
+  ssl: {rejectUnauthorized:false},
   type: "postgres",
   host: DATABASE_HOST,
   port: 5432,

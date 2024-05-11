@@ -17,6 +17,7 @@ const profile = "Profile";
 const Navigation = () => {
   const Tab = createBottomTabNavigator();
   const Stack = createNativeStackNavigator();
+
   return (
     <Tab.Navigator
       initialRouteName={home}
