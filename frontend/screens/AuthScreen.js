@@ -26,7 +26,7 @@ const AuthScreen = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch(`${constants.baseUrl}/auth/login`, {
+      const response = await fetch(`${constants.baseUrl}/user/loginOrSignup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,10 +37,10 @@ const AuthScreen = () => {
         }),
       });
 
-      const data = await response.json();
+      const res = await response.json();
 
       //Save the token in local storage
-      await AsyncStorage.setItem("token", data.token);
+      await AsyncStorage.setItem("token", res.data.token);
       // Retrieve the token from local storage
       const token = await AsyncStorage.getItem("token");
 
@@ -51,7 +51,7 @@ const AuthScreen = () => {
       }
 
       // Handle successful login here (e.g., navigate to another screen)
-      if (data.status === true) {
+      if (res.status === true) {
         console.log("Successfully logged in");
         navigate.navigate("Nav");
       }

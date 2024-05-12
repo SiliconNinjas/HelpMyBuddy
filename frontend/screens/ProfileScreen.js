@@ -40,6 +40,7 @@ const ProfileScreen = () => {
     if (editingTitle === "Email") dispatch(setEmail(inputText));
     else if (editingTitle === "Name") dispatch(setName(inputText));
     else if (editingTitle === "Gender") dispatch(setGender(inputText));
+    ``;
     setDialogVisible(false);
   };
   return (
@@ -55,11 +56,14 @@ const ProfileScreen = () => {
           style={{ backgroundColor: themeColors.secondaryBgColor }}
           className="rounded-xl mt-10 ml-4 mr-4 p-4"
         >
-          <ProfileComponent
-            title="Total Earnings"
-            data="Rs.0.0"
-            buttonName="Withdraw"
-          />
+          <View className="">
+            <ProfileComponent
+              title="Total Earnings"
+              data="Rs.0.0"
+              buttonName="Withdraw"
+              color="#FFFFFF"
+            />
+          </View>
         </View>
 
         {/* Personal Details */}
