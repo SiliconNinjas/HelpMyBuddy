@@ -57,4 +57,9 @@ export class TaskController {
     const taskRepository = getCustomRepository(TaskRepository);
     await taskRepository.fetchPostedTask(req, res);
   }
+
+  static async listAllTaskKeywords(req: Request, res: Response) {
+    const taskRepository = getCustomRepository(TaskRepository);
+    await taskRepository.listAllTaskKeywords(req, res);
+  }
 }

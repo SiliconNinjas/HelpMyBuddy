@@ -8,6 +8,7 @@ import {
   hashPassword,
 } from "../utils/services/auth.service";
 import { CustomRequest } from "../express.types";
+import axios from "axios";
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
@@ -76,6 +77,7 @@ export class UserRepository extends Repository<UserEntity> {
         "gender",
         "dateOfBirth",
         "phoneNumber",
+        "skillDescription",
         "geoLocation",
         "address",
         "adharUrl",
@@ -93,8 +95,19 @@ export class UserRepository extends Repository<UserEntity> {
         return sendErrorResponse(res, "Invalid field to update", 400);
       }
 
-      // Update user information
-      await this.update({ userId }, fieldToUpdate);
+      // If skillDescription is being updated, fetch keywords from the ML endpoint
+      if (fieldKey === "skillDescription") {
+        const skillDescription = fieldToUpdate.skillDescription;
+        const mlEndpoint = `http://43.205.199.48/keywords/${skillDescription}`;
+        const response = await axios.get(mlEndpoint);
+        const keywords = response.data.keywords;
+
+        // Update skillDescription and skills fields
+        await this.update({ userId }, { skillDescription, skills: keywords });
+      } else {
+        // Update other fields as usual
+        await this.update({ userId }, fieldToUpdate);
+      }
 
       // Fetch user data before updating isEligible
       const user = await this.findOne({ userId });

@@ -20,6 +20,13 @@ router.get("/fetchDoingTask", authMiddleware, TaskController.fetchDoingTask);
 // Route to fetch tasks posted by the user
 router.get("/fetchPostedTask", authMiddleware, TaskController.fetchPostedTask);
 
+// Route to fetch all the keywords from the database
+router.get(
+  "/listAllTaskKeywords",
+  authMiddleware,
+  TaskController.listAllTaskKeywords
+);
+
 // Route to create a new task
 router.post(
   "/askHelp",

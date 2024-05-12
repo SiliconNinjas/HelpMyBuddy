@@ -4,10 +4,10 @@ import { TaskEntity, TaskStatus } from "../entities/task.entity";
 import { UserEntity } from "../entities/user.entity";
 import { sendErrorResponse, sendSuccessResponse } from "../utils/customError";
 import { CustomRequest } from "../express.types";
+import axios from "axios";
 
 @EntityRepository(TaskEntity)
 export class TaskRepository extends Repository<TaskEntity> {
-  // Create a new task
   async createTask(req: CustomRequest, res: Response) {
     try {
       const { userId } = req.user;
@@ -26,7 +26,12 @@ export class TaskRepository extends Repository<TaskEntity> {
         return sendErrorResponse(res, "Task owner not found", 404);
       }
 
-      // Create a new task entity
+      // Fetch keywords from the ML endpoint
+      const mlEndpoint = `http://43.205.199.48/keywords/${taskDescription}`;
+      const response = await axios.get(mlEndpoint);
+      const keywords = response.data.keywords;
+
+      // Create a new task entity with the fetched keywords
       const newTask = this.create({
         taskTitle,
         taskDescription,
@@ -34,6 +39,7 @@ export class TaskRepository extends Repository<TaskEntity> {
         taskAddress,
         taskPrice,
         taskOwner,
+        taskKeywords: keywords,
       });
 
       // Save the new task
@@ -349,6 +355,29 @@ export class TaskRepository extends Repository<TaskEntity> {
       });
 
       return sendSuccessResponse(res, tasks);
+    } catch (error) {
+      console.error(error);
+      return sendErrorResponse(res, "Internal server error", 500);
+    }
+  }
+
+  // List all task keywords
+  async listAllTaskKeywords(req: Request, res: Response) {
+    try {
+      // Fetch all tasks and select only the taskKeywords field
+      const taskKeywords = await this.find({
+        select: ["taskKeywords"],
+      });
+
+      // Flatten the taskKeywords array from all tasks
+      const allKeywords = taskKeywords.flatMap(
+        (task) => task.taskKeywords || []
+      );
+
+      // Remove duplicates and return the unique keywords
+      const uniqueKeywords = Array.from(new Set(allKeywords));
+
+      return sendSuccessResponse(res, uniqueKeywords);
     } catch (error) {
       console.error(error);
       return sendErrorResponse(res, "Internal server error", 500);
