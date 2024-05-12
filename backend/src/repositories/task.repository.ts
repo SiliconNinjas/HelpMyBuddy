@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
-import { EntityRepository, Repository } from "typeorm";
-import { TaskEntity } from "../entities/task.entity";
+import { EntityRepository, In, Repository } from "typeorm";
+import { TaskEntity, TaskStatus } from "../entities/task.entity";
 import { UserEntity } from "../entities/user.entity";
 import { sendErrorResponse, sendSuccessResponse } from "../utils/customError";
 import { CustomRequest } from "../express.types";
+import axios from "axios";
 
 @EntityRepository(TaskEntity)
 export class TaskRepository extends Repository<TaskEntity> {
-  // Create a new task
   async createTask(req: CustomRequest, res: Response) {
     try {
       const { userId } = req.user;
@@ -26,7 +26,12 @@ export class TaskRepository extends Repository<TaskEntity> {
         return sendErrorResponse(res, "Task owner not found", 404);
       }
 
-      // Create a new task entity
+      // Fetch keywords from the ML endpoint
+      const mlEndpoint = `http://43.205.199.48/keywords/${taskDescription}`;
+      const response = await axios.get(mlEndpoint);
+      const keywords = response.data.keywords;
+
+      // Create a new task entity with the fetched keywords
       const newTask = this.create({
         taskTitle,
         taskDescription,
@@ -34,6 +39,7 @@ export class TaskRepository extends Repository<TaskEntity> {
         taskAddress,
         taskPrice,
         taskOwner,
+        taskKeywords: keywords,
       });
 
       // Save the new task
@@ -199,6 +205,179 @@ export class TaskRepository extends Repository<TaskEntity> {
       });
 
       return sendSuccessResponse(res, prioritizedTasks);
+    } catch (error) {
+      console.error(error);
+      return sendErrorResponse(res, "Internal server error", 500);
+    }
+  }
+
+  // Provide help for a task
+  async provideHelp(req: CustomRequest, res: Response) {
+    try {
+      const { taskId } = req.params;
+      const { userId } = req.user;
+
+      // Find the task by taskId
+      const task = await this.findOne({
+        where: { taskId },
+        relations: ["taskOwner"],
+      });
+
+      if (!task) {
+        return sendErrorResponse(res, "Task not found", 404);
+      }
+
+      // Find the user providing help
+      const helper = await UserEntity.findOne({ where: { userId } });
+
+      if (!helper) {
+        return sendErrorResponse(res, "Helper not found", 404);
+      }
+
+      // Generate OTP (6 digits)
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+      // Assign the helper and OTP to the task
+      task.helper = helper;
+      task.otp = otp;
+
+      // Save the updated task with the assigned helper and OTP
+      await this.save(task);
+
+      // Return OTP to the user (optional)
+      return sendSuccessResponse(res, "Task Started..");
+    } catch (error) {
+      console.error(error);
+      return sendErrorResponse(res, "Internal server error", 500);
+    }
+  }
+
+  async confirmStartOTP(req: CustomRequest, res: Response) {
+    try {
+      const { taskId, otp } = req.body;
+
+      // Find the task by taskId
+      const task = await this.findOne({ where: { taskId } });
+
+      if (!task) {
+        return sendErrorResponse(res, "Task not found", 404);
+      }
+
+      // Check if OTP matches
+      if (task.otp !== otp) {
+        return sendErrorResponse(res, "Invalid OTP", 400);
+      }
+
+      // Generate OTP (6 digits)
+      const Genotp = Math.floor(100000 + Math.random() * 900000).toString();
+
+      // Update task status to "started"
+      task.taskStatus = TaskStatus.STARTED;
+      task.otp = Genotp;
+
+      // Save the updated task
+      await this.save(task);
+
+      return sendSuccessResponse(res, "Task started successfully");
+    } catch (error) {
+      console.error(error);
+      return sendErrorResponse(res, "Internal server error", 500);
+    }
+  }
+  async confirmEndOTP(req: CustomRequest, res: Response) {
+    try {
+      const { taskId, otp } = req.body;
+
+      // Find the task by taskId
+      const task = await this.findOne({ where: { taskId } });
+
+      if (!task) {
+        return sendErrorResponse(res, "Task not found", 404);
+      }
+
+      // Check if OTP matches
+      if (task.otp !== otp) {
+        return sendErrorResponse(res, "Invalid OTP", 400);
+      }
+
+      // Update task status to "started"
+      task.taskStatus = TaskStatus.ENDED;
+      task.otp = null; // Clear OTP after confirmation
+
+      // Save the updated task
+      await this.save(task);
+
+      return sendSuccessResponse(res, "Task Ended successfully");
+    } catch (error) {
+      console.error(error);
+      return sendErrorResponse(res, "Internal server error", 500);
+    }
+  }
+  async fetchDoingTask(req: CustomRequest, res: Response) {
+    try {
+      const { userId } = req.user;
+
+      // Find the tasks where the helper id is equal to the current user id
+      const tasks = await this.find({
+        where: {
+          helper: userId,
+          taskStatus: In([
+            TaskStatus.PENDING,
+            TaskStatus.ACCEPTED,
+            TaskStatus.STARTED,
+          ]),
+        },
+        relations: ["taskOwner"],
+      });
+
+      return sendSuccessResponse(res, tasks);
+    } catch (error) {
+      console.error(error);
+      return sendErrorResponse(res, "Internal server error", 500);
+    }
+  }
+
+  async fetchPostedTask(req: CustomRequest, res: Response) {
+    try {
+      const { userId } = req.user;
+
+      // Find the tasks where the owner id is equal to the current user id
+      const tasks = await this.find({
+        where: {
+          taskOwner: userId,
+          taskStatus: In([
+            TaskStatus.PENDING,
+            TaskStatus.ACCEPTED,
+            TaskStatus.STARTED,
+          ]),
+        },
+        relations: ["helper"],
+      });
+
+      return sendSuccessResponse(res, tasks);
+    } catch (error) {
+      console.error(error);
+      return sendErrorResponse(res, "Internal server error", 500);
+    }
+  }
+
+  // List all task keywords
+  async listAllTaskKeywords(req: Request, res: Response) {
+    try {
+      // Fetch all tasks and select only the taskKeywords field
+      const taskKeywords = await this.find({
+        select: ["taskKeywords"],
+      });
+
+      // Flatten the taskKeywords array from all tasks
+      const allKeywords = taskKeywords.flatMap(
+        (task) => task.taskKeywords || []
+      );
+
+      // Remove duplicates and return the unique keywords
+      const uniqueKeywords = Array.from(new Set(allKeywords));
+
+      return sendSuccessResponse(res, uniqueKeywords);
     } catch (error) {
       console.error(error);
       return sendErrorResponse(res, "Internal server error", 500);

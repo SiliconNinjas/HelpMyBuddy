@@ -5,9 +5,16 @@ import {
   BaseEntity,
   ManyToOne,
   JoinColumn,
-  ManyToMany,
 } from "typeorm";
 import { UserEntity } from "./user.entity";
+
+export enum TaskStatus {
+  PENDING = "pending",
+  ACCEPTED = "accepted",
+  STARTED = "started",
+  ENDED = "ended",
+  CANCELED = "canceled",
+}
 
 @Entity("tasks")
 export class TaskEntity extends BaseEntity {
@@ -25,6 +32,9 @@ export class TaskEntity extends BaseEntity {
 
   @Column({ type: "varchar", length: 255 })
   taskAddress!: string;
+
+  @Column({ type: "varchar", length: 6, nullable: true })
+  otp!: string | null;
 
   @Column({
     type: "simple-array",
@@ -48,5 +58,17 @@ export class TaskEntity extends BaseEntity {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
+  @JoinColumn({ name: "taskOwnerId" })
   taskOwner!: UserEntity;
+
+  @ManyToOne(() => UserEntity, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+  @JoinColumn({ name: "helperId" })
+  helper!: UserEntity | null;
+
+  @Column({
+    type: "enum",
+    enum: TaskStatus,
+    default: TaskStatus.PENDING,
+  })
+  taskStatus!: TaskStatus;
 }
