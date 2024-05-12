@@ -9,72 +9,11 @@ import spacy
 import pandas as pd
 import ast
 
+import requests
+
+
 app = FastAPI()
 
-jobs = [
-    "Construction Worker",
-    "Electrician",
-    "Plumber",
-    "Welder",
-    "Mechanic",
-    "Carpenter",
-    "Painter",
-    "Landscaper",
-    "HVAC Technician",
-    "Truck Driver",
-    "Bus Driver",
-    "Delivery Driver",
-    "Warehouse Worker",
-    "Factory Worker",
-    "Janitor",
-    "Security Guard",
-    "Hairdresser",
-    "Massage Therapist",
-    "Personal Trainer",
-    "Athlete",
-    "Software Engineer",
-    "Data Scientist",
-    "Product Manager",
-    "Marketing Manager",
-    "Sales Manager",
-    "Financial Analyst",
-    "Litter box",
-    "Lawyer",
-    "Doctor",
-    "Teacher",
-    "Professor",
-    "Writer",
-    "Editor",
-    "Graphic Designer",
-    "Web Developer",
-    "User Experience (UX) Designer",
-    "Customer Service Representative",
-    "Human Resources Manager",
-    "Project Manager",
-    "Business Analyst",
-    "Management Consultant",
-    "Nurse",
-    "Dentist",
-    "Therapist",
-    "Pharmacist",
-    "Architect",
-    "Engineer",
-    "Scientist",
-    "Pilot",
-    "Realtor",
-    "Insurance Agent",
-    "Loan Officer",
-    "Paralegal",
-    "Web Content Manager",
-    "Social Media Manager",
-    "Search Engine Optimization (SEO) Specialist",
-    "Data Analyst",
-    "Database Administrator",
-    "Network Administrator",
-    "Cybersecurity Analyst",
-    "Systems Analyst",
-
-]
 
 #Dependency Functions
 def get_LLM_response(prompt):
@@ -136,7 +75,10 @@ def get_priority(phrases: str):
 
     skills = ast.literal_eval(phrases)
 
-    index = similarity(skills, jobs)
-    return {"item_id": index}
+    response = requests.get('http://3.110.207.10:8000/api/task/listAllTaskKeywords')
+    parsed_data = response.json()
+    key = parsed_data['data']
 
+    index = similarity(skills, key)
+    return {"item_id": index}
 
