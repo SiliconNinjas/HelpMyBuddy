@@ -37,9 +37,10 @@ This project is a full-stack application built using React Native with Expo for 
 - **Backend Configuration**: Update configuration files in the `backend/omgcongi` directory for database connections, and .env environment variables, etc.
 
 ## Contributing
-Frontend : Ashrith Karunakar
-Backend : Ramith K S
-Ml : Alphin K
+
+Frontend: Ashrith Karunakar
+Backend: Ramith K S
+ML: Alphin K
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
