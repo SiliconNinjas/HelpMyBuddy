@@ -4,13 +4,20 @@ import { Feather, MaterialIcons, FontAwesome } from "@expo/vector-icons";
 
 //Screens
 import HomeScreen from "../screens/HomeScreen";
+import CreateScreen from "../screens/CreateScreen";
+import StatusScreen from "../screens/StatusScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 
 //Screen Names
 const home = "Home";
+const create = "Create";
+const status = "Status";
+const profile = "Profile";
 
 const Navigation = () => {
   const Tab = createBottomTabNavigator();
   const Stack = createNativeStackNavigator();
+
   return (
     <Tab.Navigator
       initialRouteName={home}
@@ -34,9 +41,9 @@ const Navigation = () => {
           //return <FontAwesome name={iconName} size={size} color={color} />;
         },
         tabBarStyle: {
-          paddingBottom: 25,
-          paddingTop: 10,
-          height: 80,
+          paddingBottom: 35,
+          paddingTop: 15,
+          height: 90,
           backgroundColor: "#21262E",
           borderTopWidth: 0.5,
           elevation: 5,
@@ -53,6 +60,13 @@ const Navigation = () => {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen
+        name="Create"
+        options={{ presentation: "modal" }}
+        component={CreateScreen}
+      />
+      <Tab.Screen name="Status" component={StatusScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
       {/* <Tab.Screen name="Options" options={{presentation: 'modal'}} component={OptionsScreen} /> */}
     </Tab.Navigator>
   );
