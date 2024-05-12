@@ -18,6 +18,11 @@ router.post(
   TaskController.createTask
 );
 
+router.post("/provideHelp/:taskId", authMiddleware, TaskController.provideHelp);
+
+router.post("/confirmStartOTP", authMiddleware, TaskController.confirmStartOTP);
+router.post("/confirmEndOTP", authMiddleware, TaskController.confirmEndOTP);
+
 router.put(
   "/updateTask/:taskId",
   authMiddleware,

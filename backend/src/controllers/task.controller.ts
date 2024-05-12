@@ -32,4 +32,19 @@ export class TaskController {
     const taskRepository = getCustomRepository(TaskRepository);
     await taskRepository.getAllTasks(req, res);
   }
+
+  static async provideHelp(req: Request, res: Response) {
+    const taskRepository = getCustomRepository(TaskRepository);
+    await taskRepository.provideHelp(req, res);
+  }
+
+  static async confirmStartOTP(req: Request, res: Response) {
+    const taskRepository = getCustomRepository(TaskRepository);
+    await taskRepository.confirmStartOTP(req, res);
+  }
+
+  static async confirmEndOTP(req: Request, res: Response) {
+    const taskRepository = getCustomRepository(TaskRepository);
+    await taskRepository.confirmEndOTP(req, res);
+  }
 }
