@@ -12,4 +12,9 @@ export class UserController {
     const userRepository = getCustomRepository(UserRepository);
     await userRepository.updateUserInfo(req, res);
   }
+
+  static async getUserInfo(req: Request, res: Response) {
+    const userRepository = getCustomRepository(UserRepository);
+    await userRepository.getUserInfo(req, res);
+  }
 }
