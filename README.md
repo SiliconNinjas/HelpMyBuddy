@@ -34,7 +34,7 @@ This project is a full-stack application built using React Native with Expo for 
    ```
 
 ## Configuration
-- **Backend Configuration**: Update configuration files in the `backend/omgcongi` directory for database connections, and .env environment variables, etc.
+- **Backend Configuration**: Update configuration files in the `backend/omgconfig` directory for database connections, and `.env` environment variables, etc.
 
 ## Contributing
 
