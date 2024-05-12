@@ -1,19 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  name: null,
+  fullname: null,
   email: null,
   gender: null,
   dateofbirth: null,
   phoneNumber: null,
+  location: null,
+  address: null,
+  upi: null,
+  totalEarnings: null,
 };
 
 const profileSlice = createSlice({
   name: "profile",
   initialState,
   reducers: {
-    setName: (state, action) => {
-      state.name = action.payload;
+    setFullName: (state, action) => {
+      state.fullname = action.payload;
     },
     setEmail: (state, action) => {
       state.email = action.payload;
@@ -27,10 +31,31 @@ const profileSlice = createSlice({
     setPhoneNumber: (state, action) => {
       state.phoneNumber = action.payload;
     },
+    setLocation: (state, action) => {
+      state.Location = action.payload;
+    },
+    setAddress: (state, action) => {
+      state.Address = action.payload;
+    },
+    setUpi: (state, action) => {
+      state.Upi = action.payload;
+    },
+    setTotalEarnings: (state, action) => {
+      state.TotalEarnings = action.payload;
+    },
   },
 });
 
-export const { setName, setEmail, setGender, setDateOfBirth, setPhoneNumber } =
-  profileSlice.actions;
+export const {
+  setFullName,
+  setEmail,
+  setGender,
+  setDateOfBirth,
+  setPhoneNumber,
+  setLocation,
+  setAddress,
+  setUpi,
+  setTotalEarnings,
+} = profileSlice.actions;
 
 export default profileSlice.reducer;

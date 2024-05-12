@@ -6,11 +6,15 @@ import Dialog from "react-native-dialog";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setName,
+  setFullName,
   setEmail,
   setGender,
   setDateOfBirth,
   setPhoneNumber,
+  setLocation,
+  setAddress,
+  setUpi,
+  setTotalEarnings,
 } from "../redux/slice/profileSlice";
 
 const ProfileScreen = () => {
@@ -20,11 +24,15 @@ const ProfileScreen = () => {
 
   const dispatch = useDispatch();
 
-  const name = useSelector((state) => state.profile.name);
+  const fullname = useSelector((state) => state.profile.fullname);
   const email = useSelector((state) => state.profile.email);
   const gender = useSelector((state) => state.profile.gender);
   const dateofbirth = useSelector((state) => state.profile.dateofbirth);
   const phoneNumber = useSelector((state) => state.profile.phoneNumber);
+  const location = useSelector((state) => state.profile.Location);
+  const address = useSelector((state) => state.profile.Address);
+  const upi = useSelector((state) => state.profile.Upi);
+  const totalEarnings = useSelector((state) => state.profile.TotalEarnings);
 
   const showDialog = () => {
     setDialogVisible(true);
@@ -38,7 +46,7 @@ const ProfileScreen = () => {
     // Save the changes here
     console.log(inputText);
     if (editingTitle === "Email") dispatch(setEmail(inputText));
-    else if (editingTitle === "Name") dispatch(setName(inputText));
+    else if (editingTitle === "Name") dispatch(setFullName(inputText));
     else if (editingTitle === "Gender") dispatch(setGender(inputText));
     ``;
     setDialogVisible(false);
@@ -59,7 +67,7 @@ const ProfileScreen = () => {
           <View className="">
             <ProfileComponent
               title="Total Earnings"
-              data="Rs.0.0"
+              data={totalEarnings || "0.00"}
               buttonName="Withdraw"
               color="#FFFFFF"
             />
@@ -71,10 +79,14 @@ const ProfileScreen = () => {
           style={{ backgroundColor: themeColors.secondaryBgColor }}
           className="rounded-xl mt-10 ml-4 mr-4 p-4"
         >
-          <ProfileComponent title="Name" data="John Doe" buttonName="Edit" />
+          <ProfileComponent
+            title="Name"
+            data={fullname || "NA"}
+            buttonName="Edit"
+          />
           <ProfileComponent
             title="Email"
-            data="jd@gmail.com"
+            data={email}
             buttonName="Edit"
             onPress={showDialog}
           />
@@ -84,9 +96,17 @@ const ProfileScreen = () => {
             <Dialog.Button label="Cancel" onPress={handleCancel} />
             <Dialog.Button label="Save" onPress={handleSave} />
           </Dialog.Container>
-          <ProfileComponent title="Gender" data="NA" buttonName="Edit" />
-          <ProfileComponent title="Date of Birth" data="NA" buttonName="Edit" />
-          <ProfileComponent title="Phone" data="NA" buttonName="Edit" />
+          <ProfileComponent title="Gender" data={gender} buttonName="Edit" />
+          <ProfileComponent
+            title="Date of Birth"
+            data={dateofbirth || "NA"}
+            buttonName="Edit"
+          />
+          <ProfileComponent
+            title="Phone"
+            data={phoneNumber || "NA"}
+            buttonName="Edit"
+          />
         </View>
 
         {/* Location/UPI/AADHAR */}
@@ -94,14 +114,21 @@ const ProfileScreen = () => {
           style={{ backgroundColor: themeColors.secondaryBgColor }}
           className="rounded-xl mt-10 ml-4 mr-4 p-4"
         >
-          <ProfileComponent title="Location" data="NA" buttonName="Edit" />
           <ProfileComponent
-            title="Email"
-            data="jd@gmail.com"
+            title="Location"
+            data={location || "NA"}
             buttonName="Edit"
           />
-          <ProfileComponent title="Aadhar" data="NA" buttonName="Upload" />
-          <ProfileComponent title="UPI VPA" data="NA" buttonName="Add" />
+          <ProfileComponent
+            title="Address"
+            data={address || "NA"}
+            buttonName="Upload"
+          />
+          <ProfileComponent
+            title="UPI VPA"
+            data={upi || "NA"}
+            buttonName="Add"
+          />
         </View>
       </ScrollView>
     </View>

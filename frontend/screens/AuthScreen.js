@@ -38,17 +38,22 @@ const AuthScreen = () => {
       });
 
       const res = await response.json();
+      console.log(res);
 
       //Save the token in local storage
-      await AsyncStorage.setItem("token", res.data.token);
-      // Retrieve the token from local storage
+      try {
+        await AsyncStorage.setItem("token", res.data.token);
+        // Retrieve the token from local storage
+      } catch (error) {
+        console.error(error);
+      }
       const token = await AsyncStorage.getItem("token");
 
-      // Print the token
-      console.log("Token:", token);
-      if (!response.ok) {
-        throw new Error(data.error);
-      }
+      // // Print the token
+      // console.log("Token:", token);
+      // if (!response.ok) {
+      //   throw new Error(data.error);
+      // }
 
       // Handle successful login here (e.g., navigate to another screen)
       if (res.status === true) {

@@ -2,9 +2,11 @@ import { View, Image } from "react-native";
 import { OnboardFlow } from "react-native-onboard";
 import { themeColors } from "../themes";
 import { useNavigation } from "@react-navigation/native";
+import { setOnboarded } from "../redux/slice/homeSlice";
 
 const OnboardingScreen = () => {
   const navigation = useNavigation();
+
   return (
     <View style={{ backgroundColor: themeColors.bgColor }}>
       <OnboardFlow
