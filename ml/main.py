@@ -79,7 +79,7 @@ jobs = [
 #Dependency Functions
 def get_LLM_response(prompt):
   client = OpenAI(
-      api_key = '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',
+      api_key = 'sk-proj-F2jn5z5HRBNU3GaruHJpT3BlbkFJaYwwpsoF03FyWxJZoaCG',
   )
   prompt = prompt + " list down 5 relevent job keywords , only keywords"
   stream = client.chat.completions.create(
@@ -125,7 +125,7 @@ def similarity(phrases, keyword_list):
 
     return index_list
 
-@app.get("//{description}")
+@app.get("/keywords/{description}")
 def get_getKeywords(description: str):
     keywords = get_LLM_response(description)
     return {"keywords": keywords}
