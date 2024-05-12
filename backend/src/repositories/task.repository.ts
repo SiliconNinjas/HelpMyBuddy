@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { EntityRepository, Repository } from "typeorm";
+import { EntityRepository, In, Repository } from "typeorm";
 import { TaskEntity, TaskStatus } from "../entities/task.entity";
 import { UserEntity } from "../entities/user.entity";
 import { sendErrorResponse, sendSuccessResponse } from "../utils/customError";
@@ -302,6 +302,53 @@ export class TaskRepository extends Repository<TaskEntity> {
       await this.save(task);
 
       return sendSuccessResponse(res, "Task Ended successfully");
+    } catch (error) {
+      console.error(error);
+      return sendErrorResponse(res, "Internal server error", 500);
+    }
+  }
+  async fetchDoingTask(req: CustomRequest, res: Response) {
+    try {
+      const { userId } = req.user;
+
+      // Find the tasks where the helper id is equal to the current user id
+      const tasks = await this.find({
+        where: {
+          helper: userId,
+          taskStatus: In([
+            TaskStatus.PENDING,
+            TaskStatus.ACCEPTED,
+            TaskStatus.STARTED,
+          ]),
+        },
+        relations: ["taskOwner"],
+      });
+
+      return sendSuccessResponse(res, tasks);
+    } catch (error) {
+      console.error(error);
+      return sendErrorResponse(res, "Internal server error", 500);
+    }
+  }
+
+  async fetchPostedTask(req: CustomRequest, res: Response) {
+    try {
+      const { userId } = req.user;
+
+      // Find the tasks where the owner id is equal to the current user id
+      const tasks = await this.find({
+        where: {
+          taskOwner: userId,
+          taskStatus: In([
+            TaskStatus.PENDING,
+            TaskStatus.ACCEPTED,
+            TaskStatus.STARTED,
+          ]),
+        },
+        relations: ["helper"],
+      });
+
+      return sendSuccessResponse(res, tasks);
     } catch (error) {
       console.error(error);
       return sendErrorResponse(res, "Internal server error", 500);

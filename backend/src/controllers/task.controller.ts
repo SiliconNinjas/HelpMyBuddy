@@ -47,4 +47,14 @@ export class TaskController {
     const taskRepository = getCustomRepository(TaskRepository);
     await taskRepository.confirmEndOTP(req, res);
   }
+
+  static async fetchDoingTask(req: Request, res: Response) {
+    const taskRepository = getCustomRepository(TaskRepository);
+    await taskRepository.fetchDoingTask(req, res);
+  }
+
+  static async fetchPostedTask(req: Request, res: Response) {
+    const taskRepository = getCustomRepository(TaskRepository);
+    await taskRepository.fetchPostedTask(req, res);
+  }
 }

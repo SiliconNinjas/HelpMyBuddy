@@ -7,9 +7,13 @@ const router = express.Router();
 
 router.get("/", authMiddleware, TaskController.getAllTasks);
 
-router.get("/:taskId", authMiddleware, TaskController.getTaskById);
+router.get("/getTaskById/:taskId", authMiddleware, TaskController.getTaskById);
 
 router.get("/getUserTasks", authMiddleware, TaskController.getUserTasks);
+
+router.get("/fetchDoingTask", authMiddleware, TaskController.fetchDoingTask);
+
+router.get("/fetchPostedTask", authMiddleware, TaskController.fetchPostedTask);
 
 router.post(
   "/askHelp",
