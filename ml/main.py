@@ -16,29 +16,6 @@ app = FastAPI()
 
 
 #Dependency Functions
-def get_LLM_response(prompt):
-  client = OpenAI(
-      api_key = 'sk-proj-F2jn5z5HRBNU3GaruHJpT3BlbkFJaYwwpsoF03FyWxJZoaCG',
-  )
-  prompt = prompt + " list down 5 relevent job keywords , only keywords"
-  stream = client.chat.completions.create(
-      model="gpt-3.5-turbo-0125",
-      messages=[{"role": "user", "content": prompt}],
-      stream=True,
-  )
-
-  output_string = ""
-  for chunk in stream:
-      if chunk.choices[0].delta.content is not None:
-          output_string += chunk.choices[0].delta.content
-
-  # Define the regex pattern
-  pattern = r'\d+\.\s(.*?)\s*(?=\d+\.|\Z)'
-
-  # Use re.findall() to convert the string to a list
-  return re.findall(pattern, output_string)
-
-
 
 def similarity(phrases, keyword_list):
     # Load the pre-trained word embedding model
@@ -63,6 +40,31 @@ def similarity(phrases, keyword_list):
     index_list = df.index.tolist()
 
     return index_list
+
+# Utilizing the Star Chat LLM model (https://huggingface.co/HuggingFaceH4/starchat-beta) locally has provided superior results 
+# compared to CHAT-GPT. Due to budget constraints, we are leveraging the CHAT-GPT API for our current implementation.
+
+def get_LLM_response(prompt):
+  client = OpenAI(
+      api_key = 'sk-proj-F2jn5z5HRBNU3GaruHJpT3BlbkFJaYwwpsoF03FyWxJZoaCG',
+  )
+  prompt = prompt + " list down 5 relevent job keywords , only keywords"
+  stream = client.chat.completions.create(
+      model="gpt-3.5-turbo-0125",
+      messages=[{"role": "user", "content": prompt}],
+      stream=True,
+  )
+
+  output_string = ""
+  for chunk in stream:
+      if chunk.choices[0].delta.content is not None:
+          output_string += chunk.choices[0].delta.content
+
+  # Define the regex pattern
+  pattern = r'\d+\.\s(.*?)\s*(?=\d+\.|\Z)'
+
+  # Use re.findall() to convert the string to a list
+  return re.findall(pattern, output_string)
 
 @app.get("/keywords/{description}")
 def get_getKeywords(description: str):
