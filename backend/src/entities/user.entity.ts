@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  OneToMany,
+} from "typeorm";
 import { TaskEntity } from "./task.entity";
 
 enum Gender {
@@ -51,12 +57,21 @@ export class UserEntity extends BaseEntity {
   @Column({ type: "varchar", length: 255, nullable: true })
   upiId!: string | null;
 
-  @Column("simple-array", { nullable: true })
+  @Column({
+    type: "simple-array",
+    nullable: true,
+  })
   skills!: string[] | null;
+
+  @Column({ type: "varchar", length: 400, nullable: true })
+  skillDescription!: string | null;
 
   @Column({ type: "numeric", default: 0 })
   totalEarnings!: number;
 
-  @OneToMany(() => TaskEntity, task => task.taskOwner)
+  @OneToMany(() => TaskEntity, (task) => task.taskOwner, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+  })
   tasks!: TaskEntity[];
 }

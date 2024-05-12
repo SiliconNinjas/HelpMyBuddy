@@ -1,4 +1,3 @@
-// user.repository.ts
 import { Request, Response } from "express";
 import { EntityRepository, Repository } from "typeorm";
 import { UserEntity } from "../entities/user.entity";
@@ -8,10 +7,11 @@ import {
   generateToken,
   hashPassword,
 } from "../utils/services/auth.service";
+import { CustomRequest } from "../express.types";
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
-  async createNewAccountUsingEmail(req: Request, res: Response) {
+  async loginOrSignup(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
 
@@ -58,6 +58,67 @@ export class UserRepository extends Repository<UserEntity> {
 
         return sendSuccessResponse(res, { user: existingUser, token });
       }
+    } catch (error) {
+      console.error(error);
+      return sendErrorResponse(res, "Internal server error", 500);
+    }
+  }
+  // Function to update user information
+  async updateUserInfo(req: CustomRequest, res: Response) {
+    try {
+      const { userId } = req.user; // Assuming userId is available in the request
+
+      // Valid fields for updating user information
+      const validFields = [
+        "fullName",
+        "profileImageUrl",
+        "email",
+        "gender",
+        "dateOfBirth",
+        "phoneNumber",
+        "geoLocation",
+        "address",
+        "adharUrl",
+        "upiId",
+        "skills",
+        "skillDescription",
+        "totalEarnings",
+      ];
+
+      const fieldToUpdate = req.body;
+      const fieldKey = Object.keys(fieldToUpdate)[0];
+
+      // Validate if the field to update is valid
+      if (!validFields.includes(fieldKey)) {
+        return sendErrorResponse(res, "Invalid field to update", 400);
+      }
+
+      // Update user information
+      await this.update({ userId }, fieldToUpdate);
+
+      // Fetch user data before updating isEligible
+      const user = await this.findOne({ userId });
+
+      // Check if user is not undefined
+      if (!user) {
+        return sendErrorResponse(res, "User not found", 404);
+      }
+
+      // Check if all user information fields are not null or not empty
+      const allFieldsFilled = validFields.every((field) => {
+        return (
+          user[field as keyof UserEntity] !== null &&
+          user[field as keyof UserEntity] !== ""
+        );
+      });
+
+      // Update isEligible based on allFieldsFilled
+      await this.update({ userId }, { isEligible: allFieldsFilled });
+
+      // Fetch updated user data
+      const updatedUser = await this.findOne({ userId });
+
+      return sendSuccessResponse(res, updatedUser);
     } catch (error) {
       console.error(error);
       return sendErrorResponse(res, "Internal server error", 500);
