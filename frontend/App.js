@@ -45,6 +45,7 @@ export default function App() {
           <Stack.Screen name="Auth" component={AuthScreen} />
           <Stack.Screen name="DetailTaskHome" component={DetailTaskScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="DetailScreen" component={DetailTaskScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

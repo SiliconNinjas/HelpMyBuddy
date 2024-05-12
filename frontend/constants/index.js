@@ -1,3 +1,3 @@
 export const constants = {
-  baseUrl: "http://192.168.170.195:8000/api",
+  baseUrl: "http://3.110.207.10:8000/api",
 };

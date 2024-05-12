@@ -3,6 +3,7 @@ import { themeColors } from "../themes";
 import placeHolder from "../assets/placeholderImg.jpeg";
 import EarnBtn from "./EarnBtn";
 import ProfilePhotoComponent from "./ProfilePhotoComponent";
+import { useNavigation } from "@react-navigation/native";
 
 const TaskComponent = ({
   title,
@@ -11,6 +12,8 @@ const TaskComponent = ({
   timeAgo,
   price,
   distance,
+  item,
+  navigation,
 }) => {
   return (
     <View className="px-3">
@@ -35,7 +38,7 @@ const TaskComponent = ({
               {distance}Kms away
             </Text>
           </View>
-          <EarnBtn price={price} />
+          <EarnBtn price={price} navigation={navigation} />
         </View>
       </View>
     </View>

@@ -7,10 +7,12 @@ import {
 } from "react-native";
 import { themeColors } from "../themes";
 import * as Icon from "react-native-feather";
+import { useNavigation } from "@react-navigation/native";
 
-const EarnBtn = ({ price, onPress }) => {
+const EarnBtn = ({ price, navigation }) => {
+  navigation = useNavigation();
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={() => navigation.navigate("DetailTaskHome")}>
       <View className="flex flex-row justify-center mt-5 px-4">
         <View
           className="w-36 h-14 rounded-xl flex items-center justify-center flex-row"

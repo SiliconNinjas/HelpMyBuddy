@@ -10,6 +10,7 @@ const initialState = {
   address: null,
   upi: null,
   totalEarnings: null,
+  isEligible: false,
 };
 
 const profileSlice = createSlice({
@@ -43,6 +44,9 @@ const profileSlice = createSlice({
     setTotalEarnings: (state, action) => {
       state.TotalEarnings = action.payload;
     },
+    setIsEligible: (state, action) => {
+      state.isEligible = action.payload;
+    },
   },
 });
 
@@ -56,6 +60,7 @@ export const {
   setAddress,
   setUpi,
   setTotalEarnings,
+  setIsEligible,
 } = profileSlice.actions;
 
 export default profileSlice.reducer;

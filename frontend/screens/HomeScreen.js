@@ -15,6 +15,7 @@ import {
   setGender,
   setDateOfBirth,
   setPhoneNumber,
+  setIsEligible,
 } from "../redux/slice/profileSlice";
 
 const HomeScreen = () => {
@@ -41,6 +42,7 @@ const HomeScreen = () => {
         dispatch(setGender(response.data.data.gender));
         dispatch(setDateOfBirth(response.data.data.dateofbirth));
         dispatch(setPhoneNumber(response.data.data.phoneNumber));
+        dispatch(setIsEligible(response.data.data.isEligible));
       } catch (error) {
         console.error(error);
       }

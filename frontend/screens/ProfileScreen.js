@@ -1,4 +1,4 @@
-import { SafeAreaView, Text, View, ScrollView } from "react-native";
+import { SafeAreaView, Text, View, ScrollView, Image } from "react-native";
 import { themeColors } from "../themes";
 import ProfileComponent from "../components/ProfileComponent";
 import TopBar from "../components/TopBar";
@@ -15,7 +15,9 @@ import {
   setAddress,
   setUpi,
   setTotalEarnings,
+  setIsEligible,
 } from "../redux/slice/profileSlice";
+import placeHolder from "../assets/placeholderImg.jpeg";
 
 const ProfileScreen = () => {
   const [dialogVisible, setDialogVisible] = useState(false);
@@ -33,6 +35,7 @@ const ProfileScreen = () => {
   const address = useSelector((state) => state.profile.Address);
   const upi = useSelector((state) => state.profile.Upi);
   const totalEarnings = useSelector((state) => state.profile.TotalEarnings);
+  const isEligible = useSelector((state) => state.profile.isEligible);
 
   const showDialog = () => {
     setDialogVisible(true);
@@ -45,9 +48,43 @@ const ProfileScreen = () => {
   const handleSave = () => {
     // Save the changes here
     console.log(inputText);
-    if (editingTitle === "Email") dispatch(setEmail(inputText));
-    else if (editingTitle === "Name") dispatch(setFullName(inputText));
-    else if (editingTitle === "Gender") dispatch(setGender(inputText));
+    if (editingTitle === "Email") {
+      fetch(`${constants.baseUrl}/user/updateUserInfo`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          email: inputText,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    } else if (editingTitle === "Name") {
+      fetch(`${constants.baseUrl}/user/updateUserInfo`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          email: inputText,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
     ``;
     setDialogVisible(false);
   };
@@ -59,6 +96,27 @@ const ProfileScreen = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 100 }}
       >
+        {/* Profile */}
+        <View className="flex-row items-center">
+          <Image
+            className="mt-5 w-12 h-12 mr-3 ml-3 rounded-full"
+            source={placeHolder}
+          />
+          <View className="flex-col">
+            <Text className="text-xl font-semibold text-white mt-4">
+              {fullname || "NA"}
+            </Text>
+            {isEligible ? (
+              <Text className="text-md font-medium text-green-500">
+                Eligible
+              </Text>
+            ) : (
+              <Text className="text-md font-medium text-red-500">
+                Not Eligible
+              </Text>
+            )}
+          </View>
+        </View>
         {/* Withdraw */}
         <View
           style={{ backgroundColor: themeColors.secondaryBgColor }}
@@ -105,6 +163,17 @@ const ProfileScreen = () => {
           <ProfileComponent
             title="Phone"
             data={phoneNumber || "NA"}
+            buttonName="Edit"
+          />
+        </View>
+
+        <View
+          style={{ backgroundColor: themeColors.secondaryBgColor }}
+          className="rounded-xl mt-10 ml-4 mr-4 p-4"
+        >
+          <ProfileComponent
+            title="Job Description"
+            data={fullname || "NA"}
             buttonName="Edit"
           />
         </View>
