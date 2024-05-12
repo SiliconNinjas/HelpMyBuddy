@@ -21,11 +21,7 @@ router.get("/fetchDoingTask", authMiddleware, TaskController.fetchDoingTask);
 router.get("/fetchPostedTask", authMiddleware, TaskController.fetchPostedTask);
 
 // Route to fetch all the keywords from the database
-router.get(
-  "/listAllTaskKeywords",
-  authMiddleware,
-  TaskController.listAllTaskKeywords
-);
+router.get("/listAllTaskKeywords", TaskController.listAllTaskKeywords);
 
 // Route to create a new task
 router.post(
