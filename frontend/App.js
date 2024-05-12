@@ -38,10 +38,10 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {!token && (
-            <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-          )}
           <Stack.Screen name="Nav" component={Navigation} />
+
+          <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+
           <Stack.Screen name="Auth" component={AuthScreen} />
           <Stack.Screen name="DetailTaskHome" component={DetailTaskScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />

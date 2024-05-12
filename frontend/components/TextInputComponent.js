@@ -1,7 +1,13 @@
 import { SafeAreaView, Text, TextInput, View } from "react-native";
 import { themeColors } from "../themes";
 
-const TextInputComponent = ({ title, onChange, secureEntryText, value }) => {
+const TextInputComponent = ({
+  title,
+  onChange,
+  secureEntryText,
+  value,
+  keyboardType,
+}) => {
   return (
     <View className="px-6 mt-5">
       <View
@@ -15,6 +21,7 @@ const TextInputComponent = ({ title, onChange, secureEntryText, value }) => {
           onChangeText={onChange}
           secureTextEntry={secureEntryText}
           value={value}
+          keyboardType={keyboardType}
         ></TextInput>
       </View>
     </View>

@@ -8,6 +8,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Alert,
+  ScrollView,
 } from "react-native";
 import { themeColors } from "../themes";
 import hey_svg from "../assets/hey_svg.png";
@@ -70,22 +71,27 @@ const AuthScreen = () => {
       style={{ backgroundColor: themeColors.bgColor }}
       className="h-full"
     >
-      <View className="flex">
-        <View className="flex-col items-center">
-          <Image source={hey_svg} className="mt-10" />
-          <Text className="text-3xl font-bold mt-10 text-white">
-            Welcome to
-          </Text>
-          <Image className="mt-5" source={logo} />
-        </View>
-        <TextInputComponent title={"Email"} onChange={setEmail} value={email} />
-        <TextInputComponent
-          title={"Password"}
-          onChange={setPassword}
-          value={password}
-          secureEntryText={true}
-        />
-        {/* <View
+      <KeyboardAvoidingView>
+        <View className="flex">
+          <View className="flex-col items-center">
+            <Image source={hey_svg} className="mt-10" />
+            <Text className="text-3xl font-bold mt-10 text-white">
+              Welcome to
+            </Text>
+            <Image className="mt-5" source={logo} />
+          </View>
+          <TextInputComponent
+            title={"Email"}
+            onChange={setEmail}
+            value={email}
+          />
+          <TextInputComponent
+            title={"Password"}
+            onChange={setPassword}
+            value={password}
+            secureEntryText={true}
+          />
+          {/* <View
           style={{ backgroundColor: themeColors.secondaryBgColor }}
           className="w-full px-10 py-1 mt-4 items-center rounded"
         >
@@ -97,7 +103,7 @@ const AuthScreen = () => {
             onChangeText={setEmail}
           />
         </View> */}
-        {/* <View
+          {/* <View
           style={{ backgroundColor: themeColors.secondaryBgColor }}
           className=" w-full px-10 py-1 mt-4 items-center rounded"
         >
@@ -110,9 +116,9 @@ const AuthScreen = () => {
             secureTextEntry
           />
         </View> */}
-        <ConfirmHelpBtn BtnText={"Login"} onPress={handleLogin} />
-      </View>
-      {/* <View className="w-40 h-14 mt-5 rounded-xl flex justify-center items-center bg-orange">
+          <ConfirmHelpBtn BtnText={"Login"} onPress={handleLogin} />
+        </View>
+        {/* <View className="w-40 h-14 mt-5 rounded-xl flex justify-center items-center bg-orange">
         <Button
           title="Login"
           color={themeColors.text}
@@ -120,6 +126,7 @@ const AuthScreen = () => {
           className="mt-4"
         />
       </View> */}
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

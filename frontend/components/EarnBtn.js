@@ -1,17 +1,23 @@
-import { SafeAreaView, Text, TextInput, View } from "react-native";
+import {
+  SafeAreaView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { themeColors } from "../themes";
 import * as Icon from "react-native-feather";
 
-const EarnBtn = () => {
+const EarnBtn = ({ price, onPress }) => {
   return (
-    <View>
+    <TouchableOpacity onPress={onPress}>
       <View className="flex flex-row justify-center mt-5 px-4">
         <View
           className="w-36 h-14 rounded-xl flex items-center justify-center flex-row"
           style={{ backgroundColor: themeColors.activeTint }}
         >
           <View className="flex-col">
-            <Text className="text-lg text-bold text-black">Earn ₹299</Text>
+            <Text className="text-lg text-bold text-black">Earn ₹{price}</Text>
             <Text className="text-xs text-black">Provide Help</Text>
           </View>
           <Icon.ArrowUpRight
@@ -22,7 +28,7 @@ const EarnBtn = () => {
           />
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

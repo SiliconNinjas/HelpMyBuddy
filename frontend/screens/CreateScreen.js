@@ -27,11 +27,6 @@ const CreateScreen = () => {
         body: JSON.stringify({
           taskTitle,
           taskDescription,
-          taskGeoLocation: {
-            // Add a colon (:) after taskGeoLocation to define it as an object
-            lat,
-            long,
-          },
           taskPrice,
           address,
           // Add a comma (,) after long to separate it from lat
@@ -82,6 +77,7 @@ const CreateScreen = () => {
         title={"Task Price"}
         onChange={setTaskPrice}
         value={taskPrice}
+        keyboardType={"numeric"}
       />
 
       <View className="px-6 mt-3">

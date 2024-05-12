@@ -1,7 +1,7 @@
 import { SafeAreaView, Text, View, ScrollView, Image } from "react-native";
 import placeHolder from "../assets/placeholderImg.jpeg";
 
-const ProfilePhotoComponent = () => {
+const ProfilePhotoComponent = ({ name, timeAgo }) => {
   return (
     <View className="flex-row items-center">
       <Image
@@ -9,10 +9,8 @@ const ProfilePhotoComponent = () => {
         source={placeHolder}
       />
       <View className="flex-col">
-        <Text className="text-lg font-semibold text-white mt-4">Name</Text>
-        <Text className="text-xs font-medium text-slate-500">
-          Added 1 Hrs Ago
-        </Text>
+        <Text className="text-lg font-semibold text-white mt-4">{name}</Text>
+        <Text className="text-xs font-medium text-slate-500">{timeAgo}</Text>
       </View>
     </View>
   );
